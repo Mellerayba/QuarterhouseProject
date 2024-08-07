@@ -1,0 +1,28 @@
+{% extends 'managerbase.html' %}
+
+{% block head%}
+<link rel="stylesheet" type="text/css" href="style.css"> <!--This will let flask communicate with my styles css file so that i can start designing-->
+
+{% endblock %}
+
+
+{% block body%}
+<h1>Manager Messages</h1>
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li>
+                <h3>{{ message[1] }} ({{ message[3] }})</h3>
+                <p>{{ message[2] }}</p>
+                <form action="{{ url_for('manage_messages') }}" method="POST">
+                    <input type="hidden" name="message_id" value="{{ message[0] }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No messages to display.</p>
+{% endif %}
+{% endblock %}
+

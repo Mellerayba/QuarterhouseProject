@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head%}
+<link rel="stylesheet" type="text/css" href="style.css"> <!--This will let flask communicate with my styles css file so that i can start designing-->
+
+{% endblock %}
+
+
+{% block body%}
+
+
+
+    <div class="hero">
+     
+        <div class="row">
+            <div class ="title">
+                <h1> </h1>
+                <h1>  BRUNCH - SMALL PLATES - SHARERS <br> CHEF OWNED LOCAL - MODERN BRITISH</h1>
+                <a href="/book">BOOK</a>
+            </div>
+            <div class ="col">
+                <img src="{{ url_for('static', filename='images/food4.png') }}" class="feature-image"
+                style="float: right;"> 
+            </div>
+            <img src="{{ url_for('static', filename='images/food2.png') }}" class="feature-image2"
+            style="float: right;"> 
+            
+            
+        </div>
+    </div> <!--css class which helps me add a large background image-->
+
+{% endblock %} <ul>

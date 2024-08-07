@@ -1,0 +1,11 @@
+{% extends "managerbase.html" %}
+
+{% block body %}
+<form action="{{ url_for('send_message') }}" method="POST">
+    <label for="title">Title:</label>
+    <input type="text" name="title" id="title">
+    <label for="body">Message:</label>
+    <textarea name="body" id="body"></textarea>
+    <button type="submit">Send Message</button>
+</form>
+{% endblock %}

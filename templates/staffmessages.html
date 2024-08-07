@@ -1,0 +1,16 @@
+{% extends 'staffbase.html' %}
+
+{% block head%}
+<link rel="stylesheet" type="text/css" href="style.css"> <!--This will let flask communicate with my styles css file so that i can start designing-->
+
+{% endblock %}
+
+
+{% block body%}
+
+<h1>Messages</h1>
+{% for message in messages %}
+    <h3>{{ message[0] }} (on {{ message[2] }})</h3>
+    <p>{{ message[1] }}</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "managerbase.html" %}
+
+{% block body %}
+<h1>Manage Stock</h1>
+
+<h2>Food Stock</h2>
+{% if food_stock_details %}
+    <table>
+        <thead>
+            <tr>
+                <th>Food Name</th>
+                <th>Current Stock</th>
+                <th>Base Size</th>
+                <th>Serving Size</th>
+                <th>Dishes Can Be Made</th>
+                <th>New Stock Count</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in food_stock_details %}
+                <tr>
+                    <td>{{ stock[1] }}</td>
+                    <td>{{ stock[2] }}</td>
+                    <td>{{ stock[3] }}</td>
+                    <td>{{ stock[4] }}</td>
+                    <td>{{ stock[5] }}</td>
+                    <td>
+                        <form action="{{ url_for('manage_stock') }}" method="POST">
+                            <input type="hidden" name="item_id" value="{{ stock[0] }}">
+                            <input type="hidden" name="item_type" value="food">
+                            <input type="number" name="new_count" value="{{ stock[2] }}" min="0">
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No food stock information available.</p>
+{% endif %}
+
+<h2>Drink Stock</h2>
+{% if drink_stock_details %}
+    <table>
+        <thead>
+            <tr>
+                <th>Drink Name</th>
+                <th>Current Stock</th>
+                <th>Bottle Size</th>
+                <th>Serving Size</th>
+                <th>Servings Can Be Made</th>
+                <th>New Stock Count</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in drink_stock_details %}
+                <tr>
+                    <td>{{ stock[1] }}</td>
+                    <td>{{ stock[2] }}</td>
+                    <td>{{ stock[3] }}</td>
+                    <td>{{ stock[4] }}</td>
+                    <td>{{ stock[5] }}</td>
+                    <td>
+                        <form action="{{ url_for('manage_stock') }}" method="POST">
+                            <input type="hidden" name="item_id" value="{{ stock[0] }}">
+                            <input type="hidden" name="item_type" value="drink">
+                            <input type="number" name="new_count" value="{{ stock[2] }}" min="0">
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No drink stock information available.</p>
+{% endif %}
+{% endblock %}

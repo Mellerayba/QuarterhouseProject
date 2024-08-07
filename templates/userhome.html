@@ -1,0 +1,34 @@
+{% extends 'staffbase.html' %}
+
+{% block head%}
+<link rel="stylesheet" type="text/css" href="style.css"> <!--This will let flask communicate with my styles css file so that i can start designing-->
+
+{% endblock %}
+
+
+{% block body%}
+
+<div class="user-container">
+    <h1>Welcome User</h1>
+    <p>Have a great shift</p>
+    <a href="{{ url_for('recommendations') }}" class="user-btn user-btn-primary">Get Recommendations</a>
+    <a href="{{ url_for('staffmessages') }}" class="user-btn user-btn-primary">Check Messages</a>
+    <a href="{{ url_for('new_order') }}" class="user-btn user-btn-primary">Place a New Order</a>
+    <a href="#" class="user-btn user-btn-primary">View Profile</a>
+</div>
+<div id="clock" class="clock"></div>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        const timeString = `${hours}:${minutes}:${seconds}`;
+        document.getElementById('clock').textContent = timeString;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+
+{% endblock %}

@@ -13,16 +13,17 @@
         <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo"> <!--Because im using flask, i cant just put the source of the image, i need to add it to the static file-->
 
         <ul>
-            <li><a href="/">Home</a></li>
-                <li><a href="/book">Book</a></li>
-                <li><a href="/menu">Menu</a></li>
-                <li><a href="#">Contact</a></li>
+            <li><a href="{{ url_for('manager_messages') }}" class="btn btn-primary">Messages</a></li>
+                <li>    <a href="{{ url_for('manageusers') }}" class="btn btn-primary">Manage Users</a></li>
+                <li>    <a href="{{ url_for('manage_bookings') }}" class="btn btn-primary">Manage Bookings</a></li>
+                <li>    <a href="{{ url_for('send_message') }}" class="btn btn-primary">Send Message</a></li>
+
+
+
+                
                 
             
         </ul>
-        <div class="log">
-            <a href="/login">Log IN</a>
-        </div>
 
         <img src="{{ url_for('static', filename='images/name+transparent.png') }}" class="logo-top"
             style="float: right;"> 

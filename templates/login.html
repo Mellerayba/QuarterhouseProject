@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head%}
+
+{% endblock %}
+
+
+{% block body%}
+
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flash-messages">
+            {% for message in messages %} <!--Recieves the 'flash' messages and displays them - eg the error messay we display when the password is wrong-->
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+
+<form method="POST" action="/login">
+    <input type="text" name="UserName" placeholder="UserName" required>
+    <input type="password" name="UserPassword" placeholder="UserPassword" required>
+    <button type="submit">Log In</button>
+
+</form>
+
+
+
+
+{% endblock %}

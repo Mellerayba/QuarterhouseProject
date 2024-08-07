@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block head%}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+
+{% block body%}
+
+<div class="hero">
+     
+    <div class="row">
+        <img src="{{ url_for('static', filename='images/food3.png') }}" class="menu-image"
+        style="float: right;"> 
+        <div class ="menu-title">
+            <h1>OUR MENUS</h1>
+        </div>
+        <div class="menu-desc">
+            <b1>Our menus change with the seasons and always feature the finest local produce from our native Lancashire, nearby Yorkshire and the Lake District. </b1>
+        </div>
+        <div class="menu-format">
+        <div><a href="/eveningmenu">Evening Menu</a></div>
+        <div><a href="/winemenu">Wine Menu</a></div>
+        <div><a href="/drinksmenu">Drinks Menu</a></div>
+        </div>
+        <div class="menu-desc-format">
+        <div><b1>served Tues-Sat 5-9; Earlybird Tues-Fri 5-6</b1></div>
+        <div><b1>Our finest wine seletion</b1></div>
+        <div><b1>Our wide range of locally source beverages from small businesses</b1></div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,17 @@
+
+{% extends "staffbase.html" %}
+
+{% block body %}
+
+    <h1>Select a Dish</h1>
+    <form method="post" action="/recommendations">
+        <label for="dish">Choose a dish:</label>
+        <select name="dish_id" id="dish">
+            {% for dish in dishes %}
+                <option value="{{ dish.dish_id }}">{{ dish.name }} - {{ dish.price }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Get Recommendations</button>
+    </form>
+
+    {% endblock %}

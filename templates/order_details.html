@@ -1,0 +1,28 @@
+{% extends "managerbase.html" %}
+
+{% block body %}
+<h1>Order Details</h1>
+{% if order_details %}
+    <table>
+        <thead>
+            <tr>
+                <th>Food Recipe Name</th>
+                <th>Drink Name</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in order_details %}
+                <tr>
+                    <td>{{ detail[0] }}</td>
+                    <td>{{ detail[1] }}</td>
+                    <td>{{ detail[2] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No details found for this order.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "managerhome.html" %}
+
+{% block body %}
+
+<h1>Manage Bookings</h1>
+    
+<form method="post" action="{{ url_for('manage_bookings') }}">
+    <label for="date">Select Date:</label>
+    <input type="date" id="date" name="date" required>
+    <button type="submit">View Bookings</button>
+</form>
+
+{% if bookings %}
+    <h2>Bookings for {{ selected_date }}</h2>
+    <table>
+        <tr>
+            <th>Booking ID</th>
+            <th>Customer Surname</th>
+            <th>Table Number</th>
+            <th>Booking DateTime</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking[0] }}</td>
+            <td>{{ booking[1] }}</td>
+            <td>{{ booking[2] }}</td>
+            <td>{{ booking[3] }}</td>
+            <td>{{ booking[4] }}</td>
+            <td>{{ booking[5] }}</td>
+            <td>
+                <form method="post" action="{{ url_for('delete_booking', booking_id=booking[0]) }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+<h2>Add a New Booking</h2>
+<form method="post" action="{{ url_for('add_booking') }}">
+    <label for="surname">Customer Surname:</label>
+    <input type="text" id="surname" name="surname" required><br>
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required><br>
+    <label for="time">Time:</label>
+    <input type="time" id="time" name="time" required><br>
+    <label for="duration">Duration (hours):</label>
+    <input type="number" id="duration" name="duration" required><br>
+    <label for="guests">Number of Guests:</label>
+    <input type="number" id="guests" name="guests" required><br>
+    <button type="submit">Add Booking</button>
+</form>
+
+{% if error %}
+<p style="color:red;">{{ error }}</p>
+{% endif %}
+
+{% if success %}
+<p style="color:green;">{{ success }}</p>
+{% endif %}
+{% endblock %}

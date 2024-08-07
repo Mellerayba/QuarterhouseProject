@@ -1,0 +1,28 @@
+{% extends "staffbase.html" %}
+
+{% block body %}
+<form action="{{ url_for('new_order') }}" method="POST">
+    <label for="table_id">Select Table:</label>
+    <select name="table_id" id="table_id">
+        {% for table in tables %}
+            <option value="{{ table[0] }}">{{ table[1] }}</option>
+        {% endfor %}
+    </select>
+    
+    <h3>Food Items</h3>
+    {% for food in foods %}
+        <label>{{ food[1] }}</label>
+        <input type="hidden" name="food_items[]" value="{{ food[0] }}">
+        <input type="number" name="food_quantities[]" min="0" placeholder="Quantity">
+    {% endfor %}
+    
+    <h3>Drink Items</h3>
+    {% for drink in drinks %}
+        <label>{{ drink[1] }}</label>
+        <input type="hidden" name="drink_items[]" value="{{ drink[0] }}">
+        <input type="number" name="drink_quantities[]" min="0" placeholder="Quantity">
+    {% endfor %}
+    
+    <button type="submit">Submit Order</button>
+</form>
+{% endblock %}

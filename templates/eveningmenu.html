@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head%}
+<link rel="stylesheet" type="text/css" href="style.css"> <!--This will let flask communicate with my styles css file so that i can start designing-->
+
+{% endblock %}
+
+
+{% block body%}
+<div class ="drinks">
+    <img src="{{ url_for('static', filename='images/eveningmenu.png') }}" class="feature-image"
+    style="float: right;"> 
+</div>
+
+
+
+{% endblock %}

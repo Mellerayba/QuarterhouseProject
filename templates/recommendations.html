@@ -1,0 +1,22 @@
+
+{% extends "staffbase.html" %}
+
+{% block body %}
+<h1>Recommendations for {{ dish.name }}</h1>
+    
+<h2>Recommended Recipes</h2>
+<ul>
+    {% for recipe_id, score in recipes %}
+        <li>{{ recipe_id }} - Score: {{ score }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Recommended Drinks</h2>
+<ul>
+    {% for drink_id, score in drinks %}
+        <li>{{ drink_id }} - Score: {{ score }}</li>
+    {% endfor %}
+</ul>
+
+<a href="/recommendations">Go Back</a>
+{% endblock %}

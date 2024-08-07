@@ -1,0 +1,197 @@
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        UserName = request.form.get('UserName')
+        UserPassword = request.form.get('UserPassword')
+
+        cursor = mysql.connection.cursor()
+        
+        try:
+            cursor.execute("SELECT * FROM Users WHERE UserName = %s", (UserName,))
+            result1 = cursor.fetchone()
+            if result1:
+                stored_password = result1[2]  
+                if check_password_hash(stored_password, UserPassword):
+                    try:
+                        cursor.execute("SELECT * FROM Managers WHERE UserName = %s", (UserName,))
+                        result2 = cursor.fetchone()
+                        if result2:
+                            return redirect(url_for('managerhome'))
+                        else:
+                            return redirect(url_for('userhome'))
+                    except (AttributeError, TypeError):
+                        flash('Invalid login, try again', 'danger')
+                else:
+                    flash('Invalid login, try again', 'danger')
+            else:
+                flash('Invalid login, try again', 'danger')
+        except (AttributeError, TypeError):
+            flash('Invalid login, try again', 'danger')
+        finally:
+            cursor.close()
+
+    return render_template('login.html')
+
+
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        UserName = request.form.get('UserName')
+        UserPassword = request.form.get('UserPassword')
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT * FROM Users WHERE UserName = %s", (UserName,))
+            result1 = cursor.fetchone()
+            user = result1[2]
+            if user == UserPassword:
+                return redirect(url_for('userhome'))
+            else:
+                    flash('Invalid login, try again', 'danger')
+        except(AttributeError, TypeError):
+            flash('Invalid login, try again', 'danger')
+
+    return render_template('login.html')
+
+
+1. Initialize Data Structures
+    a. recommendation_list = {item1: [ingredient1, ingredient2, ...], item2: [ingredient1, ingredient3, ...], ...}
+    b. item_scores = {item1: 0, item2: 0, ...}
+    c. stock_levels = {ingredient1: stock_level, ingredient2: stock_level, ...}
+    d. expiration_dates = {ingredient1: days_until_expiration, ingredient2: days_until_expiration, ...}
+
+2. Construct Binary Trees for Scores
+    a. Construct a binary tree (ingredient_tree) for ingredient scores.
+    b. Construct a binary tree (stock_tree) for stock levels.
+    c. Construct a binary tree (expiration_tree) for expiration dates.
+
+3. Calculate Scores for Ingredients Using Binary Tree Traversal
+    a. Traverse ingredient_tree using in-order traversal.
+    b. Assign scores to ingredients based on their position in the traversal.
+
+4. Calculate Scores for Stock Levels Using Binary Tree Traversal
+    a. Traverse stock_tree using in-order traversal.
+    b. Assign scores to ingredients based on their position in the traversal.
+
+5. Calculate Scores for Expiration Dates Using Binary Tree Traversal
+    a. Traverse expiration_tree using in-order traversal.
+    b. Assign scores to ingredients based on their position in the traversal.
+
+6. Normalize Scores Using Average Method
+    a. For each item in recommendation_list:
+        i. total_score = 0
+        ii. For each ingredient in item:
+            1. ingredient_score = get_score_from_tree(ingredient_tree, ingredient)
+            2. stock_score = get_score_from_tree(stock_tree, ingredient)
+            3. expiration_score = get_score_from_tree(expiration_tree, ingredient)
+            4. total_score += ingredient_score + stock_score + expiration_score
+        iii. average_score = total_score / number_of_ingredients_in_item
+        iv. item_scores[item] = average_score
+
+7. Generate Final Recommendation List
+    a. Sort items by item_scores in descending order.
+    b. Output the sorted recommendation list.
+
+
+
+class Dish:
+    def __init__(self, dish_id, name, type, price):
+        self.dish_id = dish_id  # Initializes the dish_id attribute
+        self.name = name        # Initializes the name attribute
+        self.type = type        # Initializes the type attribute
+        self.price = price      # Initializes the price attribute
+        self.food_recommendations = []  # Initializes an empty list for food recommendations
+
+    def add_food_recommendation(self, recommended_dish):
+        self.food_recommendations.append(recommended_dish)  # Adds a recommended dish to the list
+
+
+class Drink:
+    def __init__(self, drink_id, name, type, price):
+        self.drink_id = drink_id  # Initializes the drink_id attribute
+        self.name = name          # Initializes the name attribute
+        self.type = type          # Initializes the type attribute
+        self.price = price        # Initializes the price attribute
+
+class DrinkRecommendation:
+    def __init__(self, food_recipe_id):
+        self.food_recipe_id = food_recipe_id  # Initializes the food_recipe_id attribute
+        self.drink_recommendations = []       # Initializes an empty list for drink recommendations
+
+    def add_drink_recommendation(self, drink):
+        self.drink_recommendations.append(drink)  # Adds a recommended drink to the list
+
+
+def fetch_dishes():
+    cursor = mysql.connection.cursor()  # Creates a cursor object to interact with the database
+    cursor.execute("SELECT Food_RecipeID, Food_RecipeName, Food_RecipePrice FROM Food_Recipe WHERE Food_RecipeType = 'Small Plate' ") # Ensures we only take the main dishes as reccomendations
+    dishes = cursor.fetchall()  # Fetches all rows from the result of the query
+    dish_objects = {dish[0]: Dish(dish[0], dish[1], 'Food', dish[2]) for dish in dishes}  # Creates Dish objects and stores them in a dictionary
+    return dish_objects  # Returns the dictionary of Dish objects
+
+
+def fetch_drinks():
+    cursor = mysql.connection.cursor()  # Creates a cursor object to interact with the database
+    cursor.execute("SELECT DrinkID, Drink_Name, Drink_Type, Drink_Price FROM Drink_List")  
+    drinks = cursor.fetchall()  # Fetches all rows from the result of the query
+    drink_objects = {drink[0]: Drink(drink[0], drink[1], drink[2], drink[3]) for drink in drinks}  # Creates Drink objects and stores them in a dictionary
+    return drink_objects  # Returns the dictionary of Drink objects
+
+
+def fetch_food_recommendations(dish_objects):
+    cursor = mysql.connection.cursor()  # Creates a cursor object to interact with the database
+    cursor.execute("SELECT Food_RecipeID, Pair1ID, Pair2ID, Pair3ID, Pair4ID, Pair5ID, Pair6ID FROM Recipe_Recipe_Link")  
+    recommendations = cursor.fetchall()  # Fetches all rows from the result of the query
+    for rec in recommendations:
+        dish = dish_objects[rec[0]]  # Retrieves the Dish object from the dictionary
+        for i in range(1, 7):  # Iterates over the pair IDs
+            pair_id = rec[i]
+            if pair_id and pair_id in dish_objects:  # Checks if the pair ID is valid and exists in the dictionary
+                dish.add_food_recommendation(dish_objects[pair_id])  # Adds the recommended dish to the Dish object
+
+
+def fetch_drink_recommendations():
+    cursor = mysql.connection.cursor()  # Creates a cursor object to interact with the database
+    cursor.execute("SELECT Food_RecipeID, DrinkPair1ID, DrinkPair2ID, DrinkPair3ID, DrinkPair4ID, DrinkPair5ID, DrinkPair6ID, DrinkPair7ID, DrinkPair8ID, DrinkPair9ID FROM Drink_Reccomend")  
+    recommendations = cursor.fetchall()  # Fetches all rows from the result of the query
+    drink_recommendations = {}
+    for rec in recommendations:
+        drink_recommendation = DrinkRecommendation(rec[0])  # Creates a DrinkRecommendation object for the food recipe
+        for i in range(1, 10):  # Iterates over the drink pair IDs
+            drink_id = rec[i]
+            if drink_id:
+                cursor.execute("SELECT DrinkID, Drink_Name, Drink_Type, Drink_Price FROM Drink_List WHERE DrinkID = %s", (drink_id,))
+                drink = cursor.fetchone()  # Fetches the drink details
+                if drink:
+                    drink_recommendation.add_drink_recommendation(Drink(drink[0], drink[1], drink[2], drink[3]))  # Adds the drink to the DrinkRecommendation object
+        drink_recommendations[rec[0]] = drink_recommendation  # Adds the DrinkRecommendation object to the dictionary
+    return drink_recommendations  # Returns the dictionary of DrinkRecommendation objects
+
+
+
+
+@app.route('/recommendations', methods=['GET', 'POST'])
+def recommendations():
+    dishes = fetch_dishes()  # Fetches the dishes from the database
+    drinks = fetch_drinks()  # Fetches the drinks from the database
+    fetch_food_recommendations(dishes)  # Fetches and associates food recommendations with dishes
+    drink_recommendations = fetch_drink_recommendations()  # Fetches drink recommendations
+    
+    if request.method == 'POST':  # Checks if the request method is POST
+        selected_dish_id = int(request.form['dish_id'])  # Retrieves the selected dish ID from the form
+        selected_dish = dishes[selected_dish_id]  # Retrieves the selected Dish object
+        selected_drink_recommendations = drink_recommendations.get(selected_dish_id, DrinkRecommendation(selected_dish_id))  # Retrieves the corresponding DrinkRecommendation object
+        return render_template('recommendations.html', dish=selected_dish, drink_recommendations=selected_drink_recommendations)  # Renders the recommendations template with the selected dish and drink recommendations
+    
+    return render_template('select_dish.html', dishes=dishes.values())  # Renders the select_dish template with all dishes
+
+
+            SELECT c.Surname, b.BookingDateTime, b.Duration
+            FROM Bookings b
+            JOIN Customers c ON b.CustomerID = c.CustomerID
+            WHERE b.TableID = %s
+            AND b.BookingDateTime <= %s
+            AND DATE_ADD(b.BookingDateTime, INTERVAL b.Duration HOUR) > %s
+
+23
+[('Gruner Veltliner', 15), ('Elderflower Bellini', 14) ('Pinot Noir', 13), ('Viognier', 12), ('Rhubarb Negroni', 8), ('Sauvignon Blanc Kuki', 8), ('Prosecco Amori', 6), ('Remy Martin VSOP', 4), ('Mokito', 3)]
